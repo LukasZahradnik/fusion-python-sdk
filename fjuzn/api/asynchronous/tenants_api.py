@@ -1,14 +1,14 @@
-from fusion.models.tenant_patch import TenantPatch
 from fusion.models.tenant_post import TenantPost
+from fusion.models.tenant_patch import TenantPatch
+from typing import Optional
+from fusion.models.operation import Operation
+from fjuzn.http_client import AsyncHttpClient
+from fusion.models.space import Space
 from urllib.parse import quote
 
-from typing import Optional
-from fusion.models.tenant_ref import TenantRef
 from fusion.models.tenant import Tenant
-from fusion.models.space import Space
 from fusion.models.performance import Performance
 from fusion.models.tenant_list import TenantList
-from fjuzn.http_client import AsyncHttpClient
 
 
 class TenantsApi:
@@ -17,7 +17,7 @@ class TenantsApi:
     def __init__(self, client: AsyncHttpClient):
         self.__client = client
 
-    async def create(self, tenant: TenantPost, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> TenantRef:
+    async def create(self, tenant: TenantPost, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         Creates a Tenant.  # noqa: E501
 
@@ -50,9 +50,9 @@ class TenantsApi:
         
         response = await self.__client.post(url, query_params, header_params, tenant, timeout=timeout)
         
-        return TenantRef(**response)
+        return Operation(**response)
 
-    async def delete(self, tenant_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> TenantRef:
+    async def delete(self, tenant_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         Deletes a specific Tenant.  # noqa: E501
 
@@ -84,7 +84,7 @@ class TenantsApi:
         url = url.replace("{tenant_name}", quote(str(tenant_name), safe=""))
         response = await self.__client.delete(url, query_params, header_params, timeout=timeout)
         
-        return TenantRef(**response)
+        return Operation(**response)
 
     async def get_by_id(self, tenant_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Tenant:
         """
@@ -255,7 +255,7 @@ class TenantsApi:
         
         return TenantList(**response)
 
-    async def update(self, tenant: TenantPatch, tenant_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> TenantRef:
+    async def update(self, tenant: TenantPatch, tenant_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         Updates a Tenant.  # noqa: E501
 
@@ -289,4 +289,4 @@ class TenantsApi:
         url = url.replace("{tenant_name}", quote(str(tenant_name), safe=""))
         response = await self.__client.patch(url, query_params, header_params, tenant, timeout=timeout)
         
-        return TenantRef(**response)
+        return Operation(**response)

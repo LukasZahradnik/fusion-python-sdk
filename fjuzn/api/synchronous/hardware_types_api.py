@@ -1,9 +1,9 @@
+from fusion.models.hardware_type import HardwareType
+from fjuzn.http_client import HttpClient
+from fusion.models.hardware_type_list import HardwareTypeList
+from typing import Optional
 from urllib.parse import quote
 
-from fusion.models.hardware_type import HardwareType
-from typing import Optional
-from fusion.models.hardware_type_list import HardwareTypeList
-from fjuzn.http_client import HttpClient
 
 
 class HardwareTypesApi:
@@ -12,7 +12,7 @@ class HardwareTypesApi:
     def __init__(self, client: HttpClient):
         self.__client = client
 
-    def get_e_by_id(self, hardware_type_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> HardwareType:
+    def get_by_id(self, hardware_type_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> HardwareType:
         """
         (Provider) Gets a specific Hardware Type.  # noqa: E501
 
@@ -46,7 +46,7 @@ class HardwareTypesApi:
         
         return HardwareType(**response)
 
-    def get_e(self, hardware_type_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> HardwareType:
+    def get(self, hardware_type_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> HardwareType:
         """
         (Provider) Gets a specific Hardware Type.  # noqa: E501
 

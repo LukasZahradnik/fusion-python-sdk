@@ -1,10 +1,10 @@
-from fusion.models.placement_recommendation_post import PlacementRecommendationPost
+from fusion.models.operation import Operation
+from fusion.models.placement_recommendation import PlacementRecommendation
+from fjuzn.http_client import HttpClient
+from typing import Optional
 from urllib.parse import quote
 
-from typing import Optional
-from fusion.models.placement_recommendation import PlacementRecommendation
-from fusion.models.workload_planne_ref import WorkloadPlanneRef
-from fjuzn.http_client import HttpClient
+from fusion.models.placement_recommendation_post import PlacementRecommendationPost
 
 
 class WorkloadPlannerApi:
@@ -13,7 +13,7 @@ class WorkloadPlannerApi:
     def __init__(self, client: HttpClient):
         self.__client = client
 
-    def create_placement_recommendation(self, workload_planne: PlacementRecommendationPost, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> WorkloadPlanneRef:
+    def create_placement_recommendation(self, workload_planne: PlacementRecommendationPost, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         (Provider) Generates a report on the candidate arrays a given placement group can be placed/migrated to  # noqa: E501
 
@@ -46,7 +46,7 @@ class WorkloadPlannerApi:
         
         response = self.__client.post(url, query_params, header_params, workload_planne, timeout=timeout)
         
-        return WorkloadPlanneRef(**response)
+        return Operation(**response)
 
     def get_placement_recommendation(self, placement_recommendation_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> PlacementRecommendation:
         """

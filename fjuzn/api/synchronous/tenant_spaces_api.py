@@ -1,14 +1,14 @@
+from fusion.models.performance import Performance
+from fusion.models.tenant_space_list import TenantSpaceList
+from fusion.models.operation import Operation
+from fjuzn.http_client import HttpClient
+from fusion.models.tenant_space_patch import TenantSpacePatch
+from fusion.models.tenant_space import TenantSpace
+from typing import Optional
 from urllib.parse import quote
 
-from fusion.models.tenant_space import TenantSpace
-from fusion.models.performance import Performance
-from fusion.models.tenant_space_patch import TenantSpacePatch
-from typing import Optional
 from fusion.models.space import Space
-from fusion.models.tenant_space_list import TenantSpaceList
 from fusion.models.tenant_space_post import TenantSpacePost
-from fusion.models.tenant_spac_ref import TenantSpacRef
-from fjuzn.http_client import HttpClient
 
 
 class TenantSpacesApi:
@@ -17,7 +17,7 @@ class TenantSpacesApi:
     def __init__(self, client: HttpClient):
         self.__client = client
 
-    def create_e(self, tenant_spac: TenantSpacePost, tenant_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> TenantSpacRef:
+    def create(self, tenant_space: TenantSpacePost, tenant_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         Creates a Tenant Space.  # noqa: E501
 
@@ -49,11 +49,11 @@ class TenantSpacesApi:
         query_params = []
 
         url = url.replace("{tenant_name}", quote(str(tenant_name), safe=""))
-        response = self.__client.post(url, query_params, header_params, tenant_spac, timeout=timeout)
+        response = self.__client.post(url, query_params, header_params, tenant_space, timeout=timeout)
         
-        return TenantSpacRef(**response)
+        return Operation(**response)
 
-    def delete_e(self, tenant_name: str, tenant_space_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> TenantSpacRef:
+    def delete(self, tenant_name: str, tenant_space_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         Deletes a specific Tenant Space.  # noqa: E501
 
@@ -87,9 +87,9 @@ class TenantSpacesApi:
         url = url.replace("{tenant_space_name}", quote(str(tenant_space_name), safe=""))
         response = self.__client.delete(url, query_params, header_params, timeout=timeout)
         
-        return TenantSpacRef(**response)
+        return Operation(**response)
 
-    def get_e_by_id(self, tenant_space_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> TenantSpace:
+    def get_by_id(self, tenant_space_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> TenantSpace:
         """
         Gets a specific Tenant Space.  # noqa: E501
 
@@ -123,7 +123,7 @@ class TenantSpacesApi:
         
         return TenantSpace(**response)
 
-    def get_e_performance(self, tenant_name: str, tenant_space_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Performance:
+    def get_performance(self, tenant_name: str, tenant_space_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Performance:
         """
         Gets performance metrics of a specific Tenant Space.  # noqa: E501
 
@@ -159,7 +159,7 @@ class TenantSpacesApi:
         
         return Performance(**response)
 
-    def get_e_space(self, tenant_name: str, tenant_space_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Space:
+    def get_space(self, tenant_name: str, tenant_space_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Space:
         """
         Gets space metrics of a specific Tenant Space.  # noqa: E501
 
@@ -195,7 +195,7 @@ class TenantSpacesApi:
         
         return Space(**response)
 
-    def get_e(self, tenant_name: str, tenant_space_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> TenantSpace:
+    def get(self, tenant_name: str, tenant_space_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> TenantSpace:
         """
         Gets a specific Tenant Space.  # noqa: E501
 
@@ -343,7 +343,7 @@ class TenantSpacesApi:
         
         return TenantSpaceList(**response)
 
-    def update_e(self, tenant_spac: TenantSpacePatch, tenant_name: str, tenant_space_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> TenantSpacRef:
+    def update(self, tenant_space: TenantSpacePatch, tenant_name: str, tenant_space_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         Updates a Tenant Space.  # noqa: E501
 
@@ -377,6 +377,6 @@ class TenantSpacesApi:
 
         url = url.replace("{tenant_name}", quote(str(tenant_name), safe=""))
         url = url.replace("{tenant_space_name}", quote(str(tenant_space_name), safe=""))
-        response = self.__client.patch(url, query_params, header_params, tenant_spac, timeout=timeout)
+        response = self.__client.patch(url, query_params, header_params, tenant_space, timeout=timeout)
         
-        return TenantSpacRef(**response)
+        return Operation(**response)

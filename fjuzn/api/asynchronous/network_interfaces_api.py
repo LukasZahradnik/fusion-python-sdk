@@ -1,11 +1,11 @@
-from urllib.parse import quote
-
-from typing import Optional
-from fusion.models.network_interfac_ref import NetworkInterfacRef
 from fusion.models.network_interface_patch import NetworkInterfacePatch
 from fusion.models.network_interface import NetworkInterface
 from fusion.models.network_interface_list import NetworkInterfaceList
+from typing import Optional
+from fusion.models.operation import Operation
 from fjuzn.http_client import AsyncHttpClient
+from urllib.parse import quote
+
 
 
 class NetworkInterfacesApi:
@@ -14,7 +14,7 @@ class NetworkInterfacesApi:
     def __init__(self, client: AsyncHttpClient):
         self.__client = client
 
-    async def get_e_by_id(self, network_interface_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> NetworkInterface:
+    async def get_by_id(self, network_interface_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> NetworkInterface:
         """
         (Provider) Gets a specific Network Interface.  # noqa: E501
 
@@ -48,7 +48,7 @@ class NetworkInterfacesApi:
         
         return NetworkInterface(**response)
 
-    async def get_e(self, region_name: str, availability_zone_name: str, array_name: str, net_intf_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> NetworkInterface:
+    async def get(self, region_name: str, availability_zone_name: str, array_name: str, net_intf_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> NetworkInterface:
         """
         (Provider) Gets a specific Network Interface.  # noqa: E501
 
@@ -126,7 +126,7 @@ class NetworkInterfacesApi:
         
         return NetworkInterfaceList(**response)
 
-    async def update_e(self, network_interfac: NetworkInterfacePatch, region_name: str, availability_zone_name: str, array_name: str, net_intf_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> NetworkInterfacRef:
+    async def update(self, network_interface: NetworkInterfacePatch, region_name: str, availability_zone_name: str, array_name: str, net_intf_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         (Provider) Updates a Network Interface.  # noqa: E501
 
@@ -164,6 +164,6 @@ class NetworkInterfacesApi:
         url = url.replace("{availability_zone_name}", quote(str(availability_zone_name), safe=""))
         url = url.replace("{array_name}", quote(str(array_name), safe=""))
         url = url.replace("{net_intf_name}", quote(str(net_intf_name), safe=""))
-        response = await self.__client.patch(url, query_params, header_params, network_interfac, timeout=timeout)
+        response = await self.__client.patch(url, query_params, header_params, network_interface, timeout=timeout)
         
-        return NetworkInterfacRef(**response)
+        return Operation(**response)

@@ -1,12 +1,12 @@
+from fusion.models.storage_class_list import StorageClassList
+from fusion.models.storage_class_post import StorageClassPost
+from fusion.models.storage_class import StorageClass
+from fusion.models.operation import Operation
+from fjuzn.http_client import HttpClient
+from typing import Optional
 from urllib.parse import quote
 
-from typing import Optional
-from fusion.models.storage_class_list import StorageClassList
-from fusion.models.storage_class import StorageClass
-from fusion.models.storage_class_ref import StorageClassRef
-from fusion.models.storage_class_post import StorageClassPost
 from fusion.models.storage_class_patch import StorageClassPatch
-from fjuzn.http_client import HttpClient
 
 
 class StorageClassesApi:
@@ -15,7 +15,7 @@ class StorageClassesApi:
     def __init__(self, client: HttpClient):
         self.__client = client
 
-    def create(self, storage_class: StorageClassPost, storage_service_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> StorageClassRef:
+    def create(self, storage_class: StorageClassPost, storage_service_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         (Provider) Creates a Storage Class.  # noqa: E501
 
@@ -49,9 +49,9 @@ class StorageClassesApi:
         url = url.replace("{storage_service_name}", quote(str(storage_service_name), safe=""))
         response = self.__client.post(url, query_params, header_params, storage_class, timeout=timeout)
         
-        return StorageClassRef(**response)
+        return Operation(**response)
 
-    def delete(self, storage_service_name: str, storage_class_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> StorageClassRef:
+    def delete(self, storage_service_name: str, storage_class_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         Deletes a Storage Class.  # noqa: E501
 
@@ -85,7 +85,7 @@ class StorageClassesApi:
         url = url.replace("{storage_class_name}", quote(str(storage_class_name), safe=""))
         response = self.__client.delete(url, query_params, header_params, timeout=timeout)
         
-        return StorageClassRef(**response)
+        return Operation(**response)
 
     def get_by_id(self, storage_class_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> StorageClass:
         """
@@ -191,7 +191,7 @@ class StorageClassesApi:
         
         return StorageClassList(**response)
 
-    def update(self, storage_class: StorageClassPatch, storage_service_name: str, storage_class_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> StorageClassRef:
+    def update(self, storage_class: StorageClassPatch, storage_service_name: str, storage_class_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         Updates a Storage Class.  # noqa: E501
 
@@ -227,4 +227,4 @@ class StorageClassesApi:
         url = url.replace("{storage_class_name}", quote(str(storage_class_name), safe=""))
         response = self.__client.patch(url, query_params, header_params, storage_class, timeout=timeout)
         
-        return StorageClassRef(**response)
+        return Operation(**response)

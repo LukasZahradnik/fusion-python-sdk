@@ -1,14 +1,14 @@
-from fusion.models.volume import Volume
+from fusion.models.volume_post import VolumePost
+from typing import Optional
 from fusion.models.volume_list import VolumeList
+from fusion.models.operation import Operation
+from fjuzn.http_client import AsyncHttpClient
+from fusion.models.volume import Volume
 from urllib.parse import quote
 
-from typing import Optional
-from fusion.models.volum_ref import VolumRef
 from fusion.models.space import Space
 from fusion.models.performance import Performance
 from fusion.models.volume_patch import VolumePatch
-from fusion.models.volume_post import VolumePost
-from fjuzn.http_client import AsyncHttpClient
 
 
 class VolumesApi:
@@ -17,7 +17,7 @@ class VolumesApi:
     def __init__(self, client: AsyncHttpClient):
         self.__client = client
 
-    async def create_e(self, volum: VolumePost, tenant_name: str, tenant_space_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> VolumRef:
+    async def create(self, volume: VolumePost, tenant_name: str, tenant_space_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         Creates a Volume.  # noqa: E501
 
@@ -51,11 +51,11 @@ class VolumesApi:
 
         url = url.replace("{tenant_name}", quote(str(tenant_name), safe=""))
         url = url.replace("{tenant_space_name}", quote(str(tenant_space_name), safe=""))
-        response = await self.__client.post(url, query_params, header_params, volum, timeout=timeout)
+        response = await self.__client.post(url, query_params, header_params, volume, timeout=timeout)
         
-        return VolumRef(**response)
+        return Operation(**response)
 
-    async def delete_e(self, tenant_name: str, tenant_space_name: str, volume_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> VolumRef:
+    async def delete(self, tenant_name: str, tenant_space_name: str, volume_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         Eradicate a specific volume. Volume has to be destroyed before it can be eradicated.  # noqa: E501
 
@@ -91,9 +91,9 @@ class VolumesApi:
         url = url.replace("{volume_name}", quote(str(volume_name), safe=""))
         response = await self.__client.delete(url, query_params, header_params, timeout=timeout)
         
-        return VolumRef(**response)
+        return Operation(**response)
 
-    async def get_e_by_id(self, volume_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Volume:
+    async def get_by_id(self, volume_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Volume:
         """
         Gets a specific Volume.  # noqa: E501
 
@@ -127,7 +127,7 @@ class VolumesApi:
         
         return Volume(**response)
 
-    async def get_e_performance(self, tenant_name: str, tenant_space_name: str, volume_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Performance:
+    async def get_performance(self, tenant_name: str, tenant_space_name: str, volume_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Performance:
         """
         (Provider) Gets performance metrics of a specific Volume.  # noqa: E501
 
@@ -165,7 +165,7 @@ class VolumesApi:
         
         return Performance(**response)
 
-    async def get_e_space(self, tenant_name: str, tenant_space_name: str, volume_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Space:
+    async def get_space(self, tenant_name: str, tenant_space_name: str, volume_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Space:
         """
         (Provider) Gets space metrics of a specific Volume.  # noqa: E501
 
@@ -203,7 +203,7 @@ class VolumesApi:
         
         return Space(**response)
 
-    async def get_e(self, tenant_name: str, tenant_space_name: str, volume_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Volume:
+    async def get(self, tenant_name: str, tenant_space_name: str, volume_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Volume:
         """
         Gets a specific Volume.  # noqa: E501
 
@@ -427,7 +427,7 @@ class VolumesApi:
         
         return VolumeList(**response)
 
-    async def update_e(self, volum: VolumePatch, tenant_name: str, tenant_space_name: str, volume_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> VolumRef:
+    async def update(self, volume: VolumePatch, tenant_name: str, tenant_space_name: str, volume_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         Updates a Volume -- renaming, and resizing it; changing its Storage Class; changing its Placement Group; adding or removing host connections.  # noqa: E501
 
@@ -463,6 +463,6 @@ class VolumesApi:
         url = url.replace("{tenant_name}", quote(str(tenant_name), safe=""))
         url = url.replace("{tenant_space_name}", quote(str(tenant_space_name), safe=""))
         url = url.replace("{volume_name}", quote(str(volume_name), safe=""))
-        response = await self.__client.patch(url, query_params, header_params, volum, timeout=timeout)
+        response = await self.__client.patch(url, query_params, header_params, volume, timeout=timeout)
         
-        return VolumRef(**response)
+        return Operation(**response)

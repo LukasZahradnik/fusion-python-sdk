@@ -4,8 +4,6 @@ from typing import Dict, Optional, Any
 
 import httpx
 
-from fjuzn.api.asynchronous.operations_api import OperationsApi as AsyncOperationApi
-from fjuzn.api.synchronous.operations_api import OperationsApi as SyncOperationApi
 from fusion import Operation
 
 DEFAULT_AUTH = "accessToken", "oauth"
@@ -18,6 +16,8 @@ class HttpClient:
         self.client = client
 
     def await_op(self, op: Operation, timeout: float) -> Operation:
+        from fjuzn.api.synchronous.operations_api import OperationsApi as SyncOperationApi
+
         op_api = SyncOperationApi(self)
         while True:
             op = op_api.get(op, timeout=timeout)
@@ -70,6 +70,8 @@ class AsyncHttpClient:
         self.client = client
 
     async def await_op(self, op: Operation, timeout: float) -> Operation:
+        from fjuzn.api.asynchronous.operations_api import OperationsApi as AsyncOperationApi
+
         op_api = AsyncOperationApi(self)
         while True:
             op = await op_api.get(op, timeout=timeout)

@@ -1,9 +1,9 @@
-from fusion.models.operation_list import OperationList
+from fusion.models.operation import Operation
+from fjuzn.http_client import HttpClient
+from typing import Optional
 from urllib.parse import quote
 
-from typing import Optional
-from fusion.models.operation_ref import OperationRef
-from fjuzn.http_client import HttpClient
+from fusion.models.operation_list import OperationList
 
 
 class OperationsApi:
@@ -12,7 +12,7 @@ class OperationsApi:
     def __init__(self, client: HttpClient):
         self.__client = client
 
-    def get_by_id(self, id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> OperationRef:
+    def get_by_id(self, id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         Gets a specific Operation.  # noqa: E501
 
@@ -44,9 +44,9 @@ class OperationsApi:
         url = url.replace("{id}", quote(str(id), safe=""))
         response = self.__client.get(url, query_params, header_params, timeout=timeout)
         
-        return OperationRef(**response)
+        return Operation(**response)
 
-    def get(self, id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> OperationRef:
+    def get(self, id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         Gets a specific Operation.  # noqa: E501
 
@@ -78,7 +78,7 @@ class OperationsApi:
         url = url.replace("{id}", quote(str(id), safe=""))
         response = self.__client.get(url, query_params, header_params, timeout=timeout)
         
-        return OperationRef(**response)
+        return Operation(**response)
 
     def list(self, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, action: Optional[str] = None, request_id: Optional[str] = None, request_collection: Optional[str] = None, resource_kind: Optional[str] = None, resource_id: Optional[str] = None, status: Optional[str] = None, created_after: Optional[str] = None, filter: Optional[str] = None, sort: Optional[str] = None, limit: Optional[int] = None, offset: Optional[int] = None, timeout: Optional[float] = None) -> OperationList:
         """

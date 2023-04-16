@@ -1,12 +1,12 @@
-from urllib.parse import quote
-
-from fusion.models.storage_endpoint_list import StorageEndpointList
-from fusion.models.storage_endpoint_ref import StorageEndpointRef
-from fusion.models.storage_endpoint_patch import StorageEndpointPatch
-from typing import Optional
-from fusion.models.storage_endpoint_post import StorageEndpointPost
+from fusion.models.operation import Operation
 from fusion.models.storage_endpoint import StorageEndpoint
 from fjuzn.http_client import HttpClient
+from typing import Optional
+from urllib.parse import quote
+
+from fusion.models.storage_endpoint_patch import StorageEndpointPatch
+from fusion.models.storage_endpoint_list import StorageEndpointList
+from fusion.models.storage_endpoint_post import StorageEndpointPost
 
 
 class StorageEndpointsApi:
@@ -15,7 +15,7 @@ class StorageEndpointsApi:
     def __init__(self, client: HttpClient):
         self.__client = client
 
-    def create(self, storage_endpoint: StorageEndpointPost, region_name: str, availability_zone_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> StorageEndpointRef:
+    def create(self, storage_endpoint: StorageEndpointPost, region_name: str, availability_zone_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         (Provider) Creates a Storage Endpoint.  # noqa: E501
 
@@ -51,9 +51,9 @@ class StorageEndpointsApi:
         url = url.replace("{availability_zone_name}", quote(str(availability_zone_name), safe=""))
         response = self.__client.post(url, query_params, header_params, storage_endpoint, timeout=timeout)
         
-        return StorageEndpointRef(**response)
+        return Operation(**response)
 
-    def delete(self, region_name: str, availability_zone_name: str, storage_endpoint_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> StorageEndpointRef:
+    def delete(self, region_name: str, availability_zone_name: str, storage_endpoint_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         (Provider) Deletes a specific Storage Endpoint.  # noqa: E501
 
@@ -89,7 +89,7 @@ class StorageEndpointsApi:
         url = url.replace("{storage_endpoint_name}", quote(str(storage_endpoint_name), safe=""))
         response = self.__client.delete(url, query_params, header_params, timeout=timeout)
         
-        return StorageEndpointRef(**response)
+        return Operation(**response)
 
     def get_by_id(self, storage_endpoint_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> StorageEndpoint:
         """
@@ -199,7 +199,7 @@ class StorageEndpointsApi:
         
         return StorageEndpointList(**response)
 
-    def update(self, storage_endpoint: StorageEndpointPatch, region_name: str, availability_zone_name: str, storage_endpoint_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> StorageEndpointRef:
+    def update(self, storage_endpoint: StorageEndpointPatch, region_name: str, availability_zone_name: str, storage_endpoint_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         (Provider) Updates a Storage Endpoint.  # noqa: E501
 
@@ -237,4 +237,4 @@ class StorageEndpointsApi:
         url = url.replace("{storage_endpoint_name}", quote(str(storage_endpoint_name), safe=""))
         response = self.__client.patch(url, query_params, header_params, storage_endpoint, timeout=timeout)
         
-        return StorageEndpointRef(**response)
+        return Operation(**response)

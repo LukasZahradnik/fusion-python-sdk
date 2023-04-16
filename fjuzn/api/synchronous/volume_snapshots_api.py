@@ -1,9 +1,9 @@
-from urllib.parse import quote
-
-from typing import Optional
-from fusion.models.volume_snapshot_list import VolumeSnapshotList
 from fusion.models.volume_snapshot import VolumeSnapshot
 from fjuzn.http_client import HttpClient
+from fusion.models.volume_snapshot_list import VolumeSnapshotList
+from typing import Optional
+from urllib.parse import quote
+
 
 
 class VolumeSnapshotsApi:

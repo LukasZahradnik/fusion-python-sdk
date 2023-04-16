@@ -1,12 +1,12 @@
-from fusion.models.storage_service_patch import StorageServicePatch
+from fusion.models.storage_service_list import StorageServiceList
+from typing import Optional
+from fusion.models.operation import Operation
+from fjuzn.http_client import AsyncHttpClient
 from urllib.parse import quote
 
-from typing import Optional
-from fusion.models.storage_service_list import StorageServiceList
-from fusion.models.storage_servic_ref import StorageServicRef
 from fusion.models.storage_service import StorageService
+from fusion.models.storage_service_patch import StorageServicePatch
 from fusion.models.storage_service_post import StorageServicePost
-from fjuzn.http_client import AsyncHttpClient
 
 
 class StorageServicesApi:
@@ -15,7 +15,7 @@ class StorageServicesApi:
     def __init__(self, client: AsyncHttpClient):
         self.__client = client
 
-    async def create_e(self, storage_servic: StorageServicePost, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> StorageServicRef:
+    async def create(self, storage_service: StorageServicePost, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         (Provider) Creates a Storage Service.  # noqa: E501
 
@@ -46,11 +46,11 @@ class StorageServicesApi:
         query_params = []
 
         
-        response = await self.__client.post(url, query_params, header_params, storage_servic, timeout=timeout)
+        response = await self.__client.post(url, query_params, header_params, storage_service, timeout=timeout)
         
-        return StorageServicRef(**response)
+        return Operation(**response)
 
-    async def delete_e(self, storage_service_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> StorageServicRef:
+    async def delete(self, storage_service_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         (Provider) Deletes a Storage Service.  # noqa: E501
 
@@ -82,9 +82,9 @@ class StorageServicesApi:
         url = url.replace("{storage_service_name}", quote(str(storage_service_name), safe=""))
         response = await self.__client.delete(url, query_params, header_params, timeout=timeout)
         
-        return StorageServicRef(**response)
+        return Operation(**response)
 
-    async def get_e_by_id(self, storage_service_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> StorageService:
+    async def get_by_id(self, storage_service_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> StorageService:
         """
         Gets a specific Storage Service.  # noqa: E501
 
@@ -118,7 +118,7 @@ class StorageServicesApi:
         
         return StorageService(**response)
 
-    async def get_e(self, storage_service_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> StorageService:
+    async def get(self, storage_service_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> StorageService:
         """
         Gets a specific Storage Service.  # noqa: E501
 
@@ -185,7 +185,7 @@ class StorageServicesApi:
         
         return StorageServiceList(**response)
 
-    async def update_e(self, storage_servic: StorageServicePatch, storage_service_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> StorageServicRef:
+    async def update(self, storage_service: StorageServicePatch, storage_service_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         (Provider) Updates a Storage Service.  # noqa: E501
 
@@ -217,6 +217,6 @@ class StorageServicesApi:
         query_params = []
 
         url = url.replace("{storage_service_name}", quote(str(storage_service_name), safe=""))
-        response = await self.__client.patch(url, query_params, header_params, storage_servic, timeout=timeout)
+        response = await self.__client.patch(url, query_params, header_params, storage_service, timeout=timeout)
         
-        return StorageServicRef(**response)
+        return Operation(**response)

@@ -1,9 +1,9 @@
-from fusion.models.role import Role
+from typing import List
+from typing import Optional
+from fjuzn.http_client import AsyncHttpClient
 from urllib.parse import quote
 
-from typing import Optional
-from typing import List
-from fjuzn.http_client import AsyncHttpClient
+from fusion.models.role import Role
 
 
 class RolesApi:
@@ -12,7 +12,7 @@ class RolesApi:
     def __init__(self, client: AsyncHttpClient):
         self.__client = client
 
-    async def get_e_by_id(self, role_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Role:
+    async def get_by_id(self, role_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Role:
         """
         Gets a specific Role.  # noqa: E501
 
@@ -46,7 +46,7 @@ class RolesApi:
         
         return Role(**response)
 
-    async def get_e(self, role_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Role:
+    async def get(self, role_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Role:
         """
         Gets a specific Role.  # noqa: E501
 

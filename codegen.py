@@ -21,10 +21,10 @@ def camel_to_snake(name):
     return camel_to_snake_pattern_0.sub(r"\1_\2", name).lower()
 
 
-output_path = Path("fjuzn/api/asynchronous")
+output_path = Path("fjuzn/api/synchronous")
 input_path = Path("./fusion/api")
 
-async_code = True
+async_code = False
 
 
 class_template = """
@@ -70,7 +70,7 @@ for file in input_path.iterdir():
             continue
 
         plural_resource_name = camel_to_snake(class_name).replace("_api", "")
-        if plural_resource_name.endswith("es"):
+        if plural_resource_name.endswith("ses"):
             singular_resource_name = plural_resource_name[:-2]
         else:
             singular_resource_name = plural_resource_name[:-1]  # plural to singular
@@ -154,8 +154,12 @@ for file in input_path.iterdir():
                 header_params.append(f'{" " * 8}header_params["Content-Type"] = "application/json"\n')
 
             if return_type == "Operation":
-                return_type = "".join(n.title() for n in singular_resource_name.split("_"))
-                return_type = return_type + "Ref"
+                old_return_type = return_type
+                try:
+                    return_type = "".join(n.title() for n in singular_resource_name.split("_")) + "Ref"
+                    importlib.import_module(old_return_type)
+                except:
+                    return_type = old_return_type
 
             is_list = False
             if return_type.startswith("list["):
@@ -190,3 +194,6 @@ for file in input_path.iterdir():
         file.write("\n".join(imports))
         file.write("\n\n")
         file.write("".join(source_code))
+
+
+from fjuzn import FusionClient, AsyncFusionClient

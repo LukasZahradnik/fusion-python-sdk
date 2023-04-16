@@ -1,11 +1,11 @@
 from fusion.models.host_access_policies_post import HostAccessPoliciesPost
+from fusion.models.operation import Operation
+from fjuzn.http_client import HttpClient
+from fusion.models.host_access_policy_list import HostAccessPolicyList
+from typing import Optional
 from urllib.parse import quote
 
-from typing import Optional
-from fusion.models.host_access_policy_list import HostAccessPolicyList
 from fusion.models.host_access_policy import HostAccessPolicy
-from fusion.models.host_access_polici_ref import HostAccessPoliciRef
-from fjuzn.http_client import HttpClient
 
 
 class HostAccessPoliciesApi:
@@ -14,7 +14,7 @@ class HostAccessPoliciesApi:
     def __init__(self, client: HttpClient):
         self.__client = client
 
-    def create_host_access_policy(self, host_access_polici: HostAccessPoliciesPost, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> HostAccessPoliciRef:
+    def create(self, host_access_policy: HostAccessPoliciesPost, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         Creates a Host Access Policy.  # noqa: E501
 
@@ -45,11 +45,11 @@ class HostAccessPoliciesApi:
         query_params = []
 
         
-        response = self.__client.post(url, query_params, header_params, host_access_polici, timeout=timeout)
+        response = self.__client.post(url, query_params, header_params, host_access_policy, timeout=timeout)
         
-        return HostAccessPoliciRef(**response)
+        return Operation(**response)
 
-    def delete_host_access_policy(self, host_access_policy_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> HostAccessPoliciRef:
+    def delete(self, host_access_policy_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         Deletes a specific host access policy.  # noqa: E501
 
@@ -81,9 +81,9 @@ class HostAccessPoliciesApi:
         url = url.replace("{host_access_policy_name}", quote(str(host_access_policy_name), safe=""))
         response = self.__client.delete(url, query_params, header_params, timeout=timeout)
         
-        return HostAccessPoliciRef(**response)
+        return Operation(**response)
 
-    def get_host_access_policy_by_id(self, host_access_policy_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> HostAccessPolicy:
+    def get_by_id(self, host_access_policy_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> HostAccessPolicy:
         """
         Gets a specific Host Access Policy.  # noqa: E501
 
@@ -117,7 +117,7 @@ class HostAccessPoliciesApi:
         
         return HostAccessPolicy(**response)
 
-    def get_host_access_policy(self, host_access_policy_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> HostAccessPolicy:
+    def get(self, host_access_policy_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> HostAccessPolicy:
         """
         Gets a specific Host Access Policy.  # noqa: E501
 

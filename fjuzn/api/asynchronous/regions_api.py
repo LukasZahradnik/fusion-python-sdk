@@ -1,12 +1,12 @@
-from fusion.models.region import Region
-from fusion.models.region_post import RegionPost
-from fusion.models.region_ref import RegionRef
+from fusion.models.region_list import RegionList
+from typing import Optional
+from fusion.models.operation import Operation
+from fjuzn.http_client import AsyncHttpClient
 from urllib.parse import quote
 
-from typing import Optional
-from fusion.models.region_list import RegionList
 from fusion.models.region_patch import RegionPatch
-from fjuzn.http_client import AsyncHttpClient
+from fusion.models.region_post import RegionPost
+from fusion.models.region import Region
 
 
 class RegionsApi:
@@ -15,7 +15,7 @@ class RegionsApi:
     def __init__(self, client: AsyncHttpClient):
         self.__client = client
 
-    async def create(self, region: RegionPost, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> RegionRef:
+    async def create(self, region: RegionPost, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         Creates a Region.  # noqa: E501
 
@@ -48,9 +48,9 @@ class RegionsApi:
         
         response = await self.__client.post(url, query_params, header_params, region, timeout=timeout)
         
-        return RegionRef(**response)
+        return Operation(**response)
 
-    async def delete(self, region_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> RegionRef:
+    async def delete(self, region_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         Deletes a specific Region.  # noqa: E501
 
@@ -82,7 +82,7 @@ class RegionsApi:
         url = url.replace("{region_name}", quote(str(region_name), safe=""))
         response = await self.__client.delete(url, query_params, header_params, timeout=timeout)
         
-        return RegionRef(**response)
+        return Operation(**response)
 
     async def get_by_id(self, region_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Region:
         """
@@ -185,7 +185,7 @@ class RegionsApi:
         
         return RegionList(**response)
 
-    async def update(self, region: RegionPatch, region_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> RegionRef:
+    async def update(self, region: RegionPatch, region_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         Updates a Region.  # noqa: E501
 
@@ -219,4 +219,4 @@ class RegionsApi:
         url = url.replace("{region_name}", quote(str(region_name), safe=""))
         response = await self.__client.patch(url, query_params, header_params, region, timeout=timeout)
         
-        return RegionRef(**response)
+        return Operation(**response)

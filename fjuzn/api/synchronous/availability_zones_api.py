@@ -1,13 +1,13 @@
+from fusion.models.availability_zone import AvailabilityZone
+from fusion.models.performance import Performance
+from fusion.models.operation import Operation
+from fjuzn.http_client import HttpClient
+from fusion.models.availability_zone_list import AvailabilityZoneList
+from typing import Optional
 from urllib.parse import quote
 
-from fusion.models.performance import Performance
-from fusion.models.availability_zon_ref import AvailabilityZonRef
-from fusion.models.availability_zone_post import AvailabilityZonePost
-from typing import Optional
 from fusion.models.space import Space
-from fusion.models.availability_zone import AvailabilityZone
-from fusion.models.availability_zone_list import AvailabilityZoneList
-from fjuzn.http_client import HttpClient
+from fusion.models.availability_zone_post import AvailabilityZonePost
 
 
 class AvailabilityZonesApi:
@@ -16,7 +16,7 @@ class AvailabilityZonesApi:
     def __init__(self, client: HttpClient):
         self.__client = client
 
-    def create_e(self, availability_zon: AvailabilityZonePost, region_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> AvailabilityZonRef:
+    def create(self, availability_zone: AvailabilityZonePost, region_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         Creates an Availability Zone.  # noqa: E501
 
@@ -48,11 +48,11 @@ class AvailabilityZonesApi:
         query_params = []
 
         url = url.replace("{region_name}", quote(str(region_name), safe=""))
-        response = self.__client.post(url, query_params, header_params, availability_zon, timeout=timeout)
+        response = self.__client.post(url, query_params, header_params, availability_zone, timeout=timeout)
         
-        return AvailabilityZonRef(**response)
+        return Operation(**response)
 
-    def delete_e(self, region_name: str, availability_zone_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> AvailabilityZonRef:
+    def delete(self, region_name: str, availability_zone_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         Deletes a specific Availability Zone.  # noqa: E501
 
@@ -86,9 +86,9 @@ class AvailabilityZonesApi:
         url = url.replace("{availability_zone_name}", quote(str(availability_zone_name), safe=""))
         response = self.__client.delete(url, query_params, header_params, timeout=timeout)
         
-        return AvailabilityZonRef(**response)
+        return Operation(**response)
 
-    def get_e_by_id(self, availability_zone_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> AvailabilityZone:
+    def get_by_id(self, availability_zone_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> AvailabilityZone:
         """
         Gets a specific Availability Zone.  # noqa: E501
 
@@ -122,7 +122,7 @@ class AvailabilityZonesApi:
         
         return AvailabilityZone(**response)
 
-    def get_e_performance(self, region_name: str, availability_zone_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Performance:
+    def get_performance(self, region_name: str, availability_zone_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Performance:
         """
         (Provider) Gets performance metrics of a specific Availability Zone.  # noqa: E501
 
@@ -158,7 +158,7 @@ class AvailabilityZonesApi:
         
         return Performance(**response)
 
-    def get_e_space(self, region_name: str, availability_zone_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Space:
+    def get_space(self, region_name: str, availability_zone_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Space:
         """
         (Provider) Gets space metrics of a specific Availability Zone.  # noqa: E501
 
@@ -194,7 +194,7 @@ class AvailabilityZonesApi:
         
         return Space(**response)
 
-    def get_e(self, region_name: str, availability_zone_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> AvailabilityZone:
+    def get(self, region_name: str, availability_zone_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> AvailabilityZone:
         """
         Gets a specific Availability Zone.  # noqa: E501
 

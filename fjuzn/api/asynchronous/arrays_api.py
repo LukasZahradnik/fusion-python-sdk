@@ -1,14 +1,14 @@
+from fusion.models.array import Array
+from fusion.models.array_post import ArrayPost
+from fusion.models.array_patch import ArrayPatch
+from typing import Optional
+from fusion.models.operation import Operation
+from fjuzn.http_client import AsyncHttpClient
+from fusion.models.space import Space
 from urllib.parse import quote
 
-from fusion.models.array_list import ArrayList
-from typing import Optional
-from fusion.models.array_ref import ArrayRef
-from fusion.models.array_post import ArrayPost
-from fusion.models.space import Space
-from fusion.models.array import Array
-from fusion.models.array_patch import ArrayPatch
 from fusion.models.performance import Performance
-from fjuzn.http_client import AsyncHttpClient
+from fusion.models.array_list import ArrayList
 
 
 class ArraysApi:
@@ -17,7 +17,7 @@ class ArraysApi:
     def __init__(self, client: AsyncHttpClient):
         self.__client = client
 
-    async def create(self, array: ArrayPost, region_name: str, availability_zone_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> ArrayRef:
+    async def create(self, array: ArrayPost, region_name: str, availability_zone_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         (Provider) Registers an array into Pure Fusion.  # noqa: E501
 
@@ -53,9 +53,9 @@ class ArraysApi:
         url = url.replace("{availability_zone_name}", quote(str(availability_zone_name), safe=""))
         response = await self.__client.post(url, query_params, header_params, array, timeout=timeout)
         
-        return ArrayRef(**response)
+        return Operation(**response)
 
-    async def delete(self, region_name: str, availability_zone_name: str, array_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> ArrayRef:
+    async def delete(self, region_name: str, availability_zone_name: str, array_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         Deregister a specific array.  # noqa: E501
 
@@ -91,7 +91,7 @@ class ArraysApi:
         url = url.replace("{array_name}", quote(str(array_name), safe=""))
         response = await self.__client.delete(url, query_params, header_params, timeout=timeout)
         
-        return ArrayRef(**response)
+        return Operation(**response)
 
     async def get_by_id(self, array_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Array:
         """
@@ -277,7 +277,7 @@ class ArraysApi:
         
         return ArrayList(**response)
 
-    async def update(self, array: ArrayPatch, region_name: str, availability_zone_name: str, array_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> ArrayRef:
+    async def update(self, array: ArrayPatch, region_name: str, availability_zone_name: str, array_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
         """
         Updates a specific array.  # noqa: E501
 
@@ -315,4 +315,4 @@ class ArraysApi:
         url = url.replace("{array_name}", quote(str(array_name), safe=""))
         response = await self.__client.patch(url, query_params, header_params, array, timeout=timeout)
         
-        return ArrayRef(**response)
+        return Operation(**response)

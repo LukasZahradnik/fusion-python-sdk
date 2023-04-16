@@ -1,11 +1,11 @@
+from fusion.models.user import User
+from typing import List
+from fusion.models.api_client_post import APIClientPost
+from fusion.models.api_client import APIClient
+from fjuzn.http_client import HttpClient
+from typing import Optional
 from urllib.parse import quote
 
-from fusion.models.api_client_post import APIClientPost
-from typing import Optional
-from fusion.models.api_client import APIClient
-from typing import List
-from fusion.models.user import User
-from fjuzn.http_client import HttpClient
 
 
 class IdentityManagerApi:
