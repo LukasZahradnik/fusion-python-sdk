@@ -24,9 +24,6 @@ def main():
     regions = region_client.list_regions()
     print(regions)
 
-    op = region_client.delete_region("my_new_region")
-    wait_operation_finish(op.id, api_client)
-
     print("Create new region")
     op = region_client.create_region(RegionPost("my_new_region"))
     region_ref = wait_operation_finish(op.id, api_client).result.resource
