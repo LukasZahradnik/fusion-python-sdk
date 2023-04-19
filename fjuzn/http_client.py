@@ -19,7 +19,7 @@ class HttpClient:
 
         op_api = SyncOperationApi(self)
         while True:
-            op = op_api.get(op, timeout=timeout)
+            op = op_api.get(op.id, timeout=timeout)
             if op.status == "Succeeded" or op.status == "Failed":
                 return op
 
@@ -30,11 +30,14 @@ class HttpClient:
             timeout = httpx.USE_CLIENT_DEFAULT
         
         headers = {**headers, **self.headers}
-        response = self.client.post(url, params=params, headers=headers, json=json, timeout=timeout)
+        response = self.client.post(url, params=params, headers=headers, json=json.to_dict(), timeout=timeout)
         r_json = response.json()
 
-        op = self.await_op(Operation(**r_json), timeout)
+        if r_json.get("error"):
+            raise Exception(r_json)
 
+        op = self.await_op(Operation(**r_json), timeout)
+                
         return op.result["resource"]
 
     def get(self, url: str, params, headers: Dict[str, str], timeout: Optional[float] = None):
@@ -44,15 +47,23 @@ class HttpClient:
         headers = {**headers, **self.headers}
         response = self.client.get(url, params=params, headers=headers, timeout=timeout, follow_redirects=True,)
         
-        return response.json()
+        r_json = response.json()
+
+        if r_json.get("error"):
+            raise Exception(r_json)
+
+        return r_json
 
     def patch(self, url: str, params, headers: Dict[str, str], json: Any, timeout: Optional[float] = None):
         if timeout is None:
             timeout = httpx.USE_CLIENT_DEFAULT
 
         headers = {**headers, **self.headers}
-        response = self.client.patch(url, params=params, headers=headers, json=json, timeout=timeout)
+        response = self.client.patch(url, params=params, headers=headers, json=json.to_dict(), timeout=timeout)
         r_json = response.json()
+
+        if r_json.get("error"):
+            raise Exception(r_json)
 
         op = self.await_op(Operation(**r_json), timeout)
 
@@ -65,6 +76,9 @@ class HttpClient:
         headers = {**headers, **self.headers}
         response = self.client.delete(url, params=params, headers=headers, timeout=timeout)
         r_json = response.json()
+
+        if r_json.get("error"):
+            raise Exception(r_json)
 
         op = self.await_op(Operation(**r_json), timeout)
 
