@@ -1,8 +1,8 @@
+from fusion.models.version import Version
+from fjuzn.http_client import AsyncHttpClient
+from typing import Optional
 from urllib.parse import quote
 
-from fusion.models.version import Version
-from typing import Optional
-from fjuzn.http_client import AsyncHttpClient
 
 
 class DefaultApi:

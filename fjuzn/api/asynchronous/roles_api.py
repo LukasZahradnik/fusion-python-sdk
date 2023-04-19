@@ -1,8 +1,8 @@
-from typing import List
-from typing import Optional
-from fjuzn.http_client import AsyncHttpClient
 from urllib.parse import quote
 
+from typing import List
+from fjuzn.http_client import AsyncHttpClient
+from typing import Optional
 from fusion.models.role import Role
 
 

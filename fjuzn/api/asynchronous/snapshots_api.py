@@ -1,12 +1,12 @@
-from fusion.models.snapshot_patch import SnapshotPatch
-from fusion.models.snapshot import Snapshot
-from typing import Optional
-from fusion.models.snapshot_list import SnapshotList
-from fusion.models.operation import Operation
-from fjuzn.http_client import AsyncHttpClient
+from fusion.models.snapshot_ref import SnapshotRef
 from urllib.parse import quote
 
+from fusion.models.snapshot_patch import SnapshotPatch
 from fusion.models.snapshot_post import SnapshotPost
+from fjuzn.http_client import AsyncHttpClient
+from typing import Optional
+from fusion.models.snapshot_list import SnapshotList
+from fusion.models.snapshot import Snapshot
 
 
 class SnapshotsApi:
@@ -15,7 +15,7 @@ class SnapshotsApi:
     def __init__(self, client: AsyncHttpClient):
         self.__client = client
 
-    async def create(self, snapshot: SnapshotPost, tenant_name: str, tenant_space_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    async def create(self, snapshot: SnapshotPost, tenant_name: str, tenant_space_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> SnapshotRef:
         """
         Creates Volume snapshots of specified Volume names.  # noqa: E501
 
@@ -51,9 +51,9 @@ class SnapshotsApi:
         url = url.replace("{tenant_space_name}", quote(str(tenant_space_name), safe=""))
         response = await self.__client.post(url, query_params, header_params, snapshot, timeout=timeout)
         
-        return Operation(**response)
+        return SnapshotRef(**response)
 
-    async def delete(self, tenant_name: str, tenant_space_name: str, snapshot_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    async def delete(self, tenant_name: str, tenant_space_name: str, snapshot_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> None:
         """
         Eradicate a snapshot and its volume snapshots which were previously marked for deletion using PATCH.  # noqa: E501
 
@@ -89,7 +89,7 @@ class SnapshotsApi:
         url = url.replace("{snapshot_name}", quote(str(snapshot_name), safe=""))
         response = await self.__client.delete(url, query_params, header_params, timeout=timeout)
         
-        return Operation(**response)
+        return None
 
     async def get_by_id(self, snapshot_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Snapshot:
         """
@@ -304,7 +304,7 @@ class SnapshotsApi:
         
         return SnapshotList(**response)
 
-    async def update(self, snapshot: SnapshotPatch, tenant_name: str, tenant_space_name: str, snapshot_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    async def update(self, snapshot: SnapshotPatch, tenant_name: str, tenant_space_name: str, snapshot_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> SnapshotRef:
         """
         Recovers a pending snapshot  # noqa: E501
 
@@ -342,4 +342,4 @@ class SnapshotsApi:
         url = url.replace("{snapshot_name}", quote(str(snapshot_name), safe=""))
         response = await self.__client.patch(url, query_params, header_params, snapshot, timeout=timeout)
         
-        return Operation(**response)
+        return SnapshotRef(**response)

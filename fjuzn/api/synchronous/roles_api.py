@@ -1,9 +1,9 @@
-from typing import List
 from fusion.models.role import Role
-from fjuzn.http_client import HttpClient
 from typing import Optional
+from fjuzn.http_client import HttpClient
 from urllib.parse import quote
 
+from typing import List
 
 
 class RolesApi:

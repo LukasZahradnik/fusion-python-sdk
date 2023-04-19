@@ -30,13 +30,20 @@ from fjuzn.http_client import HttpClient
 
 
 class FusionClient:
-    __slots__ = "__client",
+    __slots__ = "__client", "__configuration"
 
-    def __init__(self):
+    def __init__(self, configuration):
         self.__client: Optional[HttpClient] = None
+        self.__configuration = configuration
 
     def __enter__(self):
-        self.__client = HttpClient(httpx.Client())
+        settings = self.__configuration.auth_settings()
+        headers = {
+            settings["oauth"]["key"]: settings["oauth"]["value"],
+            "User-Agent": "Swagger-Codegen/1.0.11/python",    
+        }
+
+        self.__client = HttpClient(httpx.Client(base_url=self.__configuration.host), headers,)
         self.__client.client.__enter__()
 
         return self

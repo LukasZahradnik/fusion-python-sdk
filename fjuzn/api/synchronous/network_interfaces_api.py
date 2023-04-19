@@ -1,11 +1,11 @@
-from fusion.models.operation import Operation
-from fusion.models.network_interface import NetworkInterface
+from fusion.models.network_interface_patch import NetworkInterfacePatch
+from typing import Optional
 from fjuzn.http_client import HttpClient
 from fusion.models.network_interface_list import NetworkInterfaceList
-from typing import Optional
+from fusion.models.network_interface import NetworkInterface
 from urllib.parse import quote
 
-from fusion.models.network_interface_patch import NetworkInterfacePatch
+from fusion.models.network_interface_ref import NetworkInterfaceRef
 
 
 class NetworkInterfacesApi:
@@ -126,7 +126,7 @@ class NetworkInterfacesApi:
         
         return NetworkInterfaceList(**response)
 
-    def update(self, network_interface: NetworkInterfacePatch, region_name: str, availability_zone_name: str, array_name: str, net_intf_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    def update(self, network_interface: NetworkInterfacePatch, region_name: str, availability_zone_name: str, array_name: str, net_intf_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> NetworkInterfaceRef:
         """
         (Provider) Updates a Network Interface.  # noqa: E501
 
@@ -166,4 +166,4 @@ class NetworkInterfacesApi:
         url = url.replace("{net_intf_name}", quote(str(net_intf_name), safe=""))
         response = self.__client.patch(url, query_params, header_params, network_interface, timeout=timeout)
         
-        return Operation(**response)
+        return NetworkInterfaceRef(**response)

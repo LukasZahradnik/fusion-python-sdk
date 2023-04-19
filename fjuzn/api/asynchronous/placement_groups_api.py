@@ -1,14 +1,14 @@
 from fusion.models.placement_group_post import PlacementGroupPost
-from fusion.models.session_list import SessionList
-from fusion.models.placement_group_list import PlacementGroupList
-from fusion.models.placement_group import PlacementGroup
-from typing import Optional
-from fusion.models.operation import Operation
-from fjuzn.http_client import AsyncHttpClient
-from fusion.models.space import Space
 from urllib.parse import quote
 
+from fusion.models.placement_group_list import PlacementGroupList
+from fjuzn.http_client import AsyncHttpClient
+from typing import Optional
 from fusion.models.placement_group_patch import PlacementGroupPatch
+from fusion.models.placement_group_ref import PlacementGroupRef
+from fusion.models.space import Space
+from fusion.models.placement_group import PlacementGroup
+from fusion.models.session_list import SessionList
 from fusion.models.performance import Performance
 
 
@@ -18,7 +18,7 @@ class PlacementGroupsApi:
     def __init__(self, client: AsyncHttpClient):
         self.__client = client
 
-    async def create(self, placement_group: PlacementGroupPost, tenant_name: str, tenant_space_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    async def create(self, placement_group: PlacementGroupPost, tenant_name: str, tenant_space_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> PlacementGroupRef:
         """
         Creates a Placement Group.  # noqa: E501
 
@@ -54,9 +54,9 @@ class PlacementGroupsApi:
         url = url.replace("{tenant_space_name}", quote(str(tenant_space_name), safe=""))
         response = await self.__client.post(url, query_params, header_params, placement_group, timeout=timeout)
         
-        return Operation(**response)
+        return PlacementGroupRef(**response)
 
-    async def delete(self, tenant_name: str, tenant_space_name: str, placement_group_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    async def delete(self, tenant_name: str, tenant_space_name: str, placement_group_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> None:
         """
         Deletes a specific Placement Group.  # noqa: E501
 
@@ -92,7 +92,7 @@ class PlacementGroupsApi:
         url = url.replace("{placement_group_name}", quote(str(placement_group_name), safe=""))
         response = await self.__client.delete(url, query_params, header_params, timeout=timeout)
         
-        return Operation(**response)
+        return None
 
     async def get_by_id(self, placement_group_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> PlacementGroup:
         """
@@ -436,7 +436,7 @@ class PlacementGroupsApi:
         
         return PlacementGroupList(**response)
 
-    async def update(self, placement_group: PlacementGroupPatch, tenant_name: str, tenant_space_name: str, placement_group_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    async def update(self, placement_group: PlacementGroupPatch, tenant_name: str, tenant_space_name: str, placement_group_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> PlacementGroupRef:
         """
         Updates a specific Placement Group.  # noqa: E501
 
@@ -474,4 +474,4 @@ class PlacementGroupsApi:
         url = url.replace("{placement_group_name}", quote(str(placement_group_name), safe=""))
         response = await self.__client.patch(url, query_params, header_params, placement_group, timeout=timeout)
         
-        return Operation(**response)
+        return PlacementGroupRef(**response)

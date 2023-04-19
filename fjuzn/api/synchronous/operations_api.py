@@ -1,9 +1,9 @@
 from fusion.models.operation import Operation
-from fjuzn.http_client import HttpClient
 from typing import Optional
+from fjuzn.http_client import HttpClient
+from fusion.models.operation_list import OperationList
 from urllib.parse import quote
 
-from fusion.models.operation_list import OperationList
 
 
 class OperationsApi:

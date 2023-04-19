@@ -1,13 +1,13 @@
-from fusion.models.availability_zone import AvailabilityZone
-from fusion.models.performance import Performance
-from fusion.models.operation import Operation
-from fjuzn.http_client import HttpClient
 from fusion.models.availability_zone_list import AvailabilityZoneList
+from fusion.models.availability_zone_post import AvailabilityZonePost
 from typing import Optional
+from fusion.models.availability_zone_ref import AvailabilityZoneRef
+from fjuzn.http_client import HttpClient
+from fusion.models.availability_zone import AvailabilityZone
 from urllib.parse import quote
 
+from fusion.models.performance import Performance
 from fusion.models.space import Space
-from fusion.models.availability_zone_post import AvailabilityZonePost
 
 
 class AvailabilityZonesApi:
@@ -16,7 +16,7 @@ class AvailabilityZonesApi:
     def __init__(self, client: HttpClient):
         self.__client = client
 
-    def create(self, availability_zone: AvailabilityZonePost, region_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    def create(self, availability_zone: AvailabilityZonePost, region_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> AvailabilityZoneRef:
         """
         Creates an Availability Zone.  # noqa: E501
 
@@ -50,9 +50,9 @@ class AvailabilityZonesApi:
         url = url.replace("{region_name}", quote(str(region_name), safe=""))
         response = self.__client.post(url, query_params, header_params, availability_zone, timeout=timeout)
         
-        return Operation(**response)
+        return AvailabilityZoneRef(**response)
 
-    def delete(self, region_name: str, availability_zone_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    def delete(self, region_name: str, availability_zone_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> None:
         """
         Deletes a specific Availability Zone.  # noqa: E501
 
@@ -86,7 +86,7 @@ class AvailabilityZonesApi:
         url = url.replace("{availability_zone_name}", quote(str(availability_zone_name), safe=""))
         response = self.__client.delete(url, query_params, header_params, timeout=timeout)
         
-        return Operation(**response)
+        return None
 
     def get_by_id(self, availability_zone_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> AvailabilityZone:
         """

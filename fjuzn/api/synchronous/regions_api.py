@@ -1,12 +1,12 @@
-from fusion.models.region_patch import RegionPatch
 from fusion.models.region_post import RegionPost
-from fusion.models.operation import Operation
-from fusion.models.region import Region
-from fjuzn.http_client import HttpClient
+from fusion.models.region_ref import RegionRef
 from typing import Optional
+from fjuzn.http_client import HttpClient
+from fusion.models.region_list import RegionList
 from urllib.parse import quote
 
-from fusion.models.region_list import RegionList
+from fusion.models.region import Region
+from fusion.models.region_patch import RegionPatch
 
 
 class RegionsApi:
@@ -15,7 +15,7 @@ class RegionsApi:
     def __init__(self, client: HttpClient):
         self.__client = client
 
-    def create(self, region: RegionPost, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    def create(self, region: RegionPost, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> RegionRef:
         """
         Creates a Region.  # noqa: E501
 
@@ -48,9 +48,9 @@ class RegionsApi:
         
         response = self.__client.post(url, query_params, header_params, region, timeout=timeout)
         
-        return Operation(**response)
+        return RegionRef(**response)
 
-    def delete(self, region_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    def delete(self, region_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> None:
         """
         Deletes a specific Region.  # noqa: E501
 
@@ -82,7 +82,7 @@ class RegionsApi:
         url = url.replace("{region_name}", quote(str(region_name), safe=""))
         response = self.__client.delete(url, query_params, header_params, timeout=timeout)
         
-        return Operation(**response)
+        return None
 
     def get_by_id(self, region_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Region:
         """
@@ -185,7 +185,7 @@ class RegionsApi:
         
         return RegionList(**response)
 
-    def update(self, region: RegionPatch, region_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    def update(self, region: RegionPatch, region_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> RegionRef:
         """
         Updates a Region.  # noqa: E501
 
@@ -219,4 +219,4 @@ class RegionsApi:
         url = url.replace("{region_name}", quote(str(region_name), safe=""))
         response = self.__client.patch(url, query_params, header_params, region, timeout=timeout)
         
-        return Operation(**response)
+        return RegionRef(**response)

@@ -1,12 +1,12 @@
-from fusion.models.storage_endpoint import StorageEndpoint
-from fusion.models.storage_endpoint_post import StorageEndpointPost
-from fusion.models.storage_endpoint_list import StorageEndpointList
-from typing import Optional
-from fusion.models.operation import Operation
-from fjuzn.http_client import AsyncHttpClient
 from urllib.parse import quote
 
+from fusion.models.storage_endpoint_post import StorageEndpointPost
+from fjuzn.http_client import AsyncHttpClient
+from typing import Optional
+from fusion.models.storage_endpoint_list import StorageEndpointList
 from fusion.models.storage_endpoint_patch import StorageEndpointPatch
+from fusion.models.storage_endpoint import StorageEndpoint
+from fusion.models.operation import Operation
 
 
 class StorageEndpointsApi:
@@ -53,7 +53,7 @@ class StorageEndpointsApi:
         
         return Operation(**response)
 
-    async def delete(self, region_name: str, availability_zone_name: str, storage_endpoint_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    async def delete(self, region_name: str, availability_zone_name: str, storage_endpoint_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> None:
         """
         (Provider) Deletes a specific Storage Endpoint.  # noqa: E501
 
@@ -89,7 +89,7 @@ class StorageEndpointsApi:
         url = url.replace("{storage_endpoint_name}", quote(str(storage_endpoint_name), safe=""))
         response = await self.__client.delete(url, query_params, header_params, timeout=timeout)
         
-        return Operation(**response)
+        return None
 
     async def get_by_id(self, storage_endpoint_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> StorageEndpoint:
         """

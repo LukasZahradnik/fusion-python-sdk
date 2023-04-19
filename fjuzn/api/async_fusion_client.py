@@ -30,13 +30,20 @@ from fjuzn.http_client import AsyncHttpClient
 
 
 class AsyncFusionClient:
-    __slots__ = "__client",
+    __slots__ = "__client", "__configuration"
 
-    def __init__(self):
+    def __init__(self, configuration):
         self.__client: Optional[AsyncHttpClient] = None
+        self.__configuration = configuration
 
     async def __aenter__(self):
-        self.__client = AsyncHttpClient(httpx.AsyncClient())
+        settings = self.__configuration.auth_settings()
+        headers = {
+            settings["oauth"]["key"]: settings["oauth"]["value"],
+            "User-Agent": "Swagger-Codegen/1.0.11/python",    
+        }
+
+        self.__client = AsyncHttpClient(httpx.AsyncClient(base_url=self.__configuration.host), headers)
         await self.__client.client.__aenter__()
 
         return self
@@ -45,94 +52,94 @@ class AsyncFusionClient:
         await self.__client.client.__aexit__()
 
     @property
-    async def array(self) -> ArraysApi:
+    def array(self) -> ArraysApi:
         return ArraysApi(self.__client)
 
     @property
-    async def availability_zone(self) -> AvailabilityZonesApi:
+    def availability_zone(self) -> AvailabilityZonesApi:
         return AvailabilityZonesApi(self.__client)
 
     @property
-    async def hardware_type(self) -> HardwareTypesApi:
+    def hardware_type(self) -> HardwareTypesApi:
         return HardwareTypesApi(self.__client)
 
     @property
-    async def host_access_policy(self) -> HostAccessPoliciesApi:
+    def host_access_policy(self) -> HostAccessPoliciesApi:
         return HostAccessPoliciesApi(self.__client)
 
     @property
-    async def identity_manager(self) -> IdentityManagerApi:
+    def identity_manager(self) -> IdentityManagerApi:
         return IdentityManagerApi(self.__client)
 
     @property
-    async def network_interface_group(self) -> NetworkInterfaceGroupsApi:
+    def network_interface_group(self) -> NetworkInterfaceGroupsApi:
         return NetworkInterfaceGroupsApi(self.__client)
 
     @property
-    async def network_interface(self) -> NetworkInterfacesApi:
+    def network_interface(self) -> NetworkInterfacesApi:
         return NetworkInterfacesApi(self.__client)
 
     @property
-    async def operation(self) -> OperationsApi:
+    def operation(self) -> OperationsApi:
         return OperationsApi(self.__client)
 
     @property
-    async def placement_group(self) -> PlacementGroupsApi:
+    def placement_group(self) -> PlacementGroupsApi:
         return PlacementGroupsApi(self.__client)
 
     @property
-    async def protection_policy(self) -> ProtectionPoliciesApi:
+    def protection_policy(self) -> ProtectionPoliciesApi:
         return ProtectionPoliciesApi(self.__client)
 
     @property
-    async def region(self) -> RegionsApi:
+    def region(self) -> RegionsApi:
         return RegionsApi(self.__client)
 
     @property
-    async def role_assignment(self) -> RoleAssignmentsApi:
+    def role_assignment(self) -> RoleAssignmentsApi:
         return RoleAssignmentsApi(self.__client)
 
     @property
-    async def role(self) -> RolesApi:
+    def role(self) -> RolesApi:
         return RolesApi(self.__client)
 
     @property
-    async def snapshot(self) -> SnapshotsApi:
+    def snapshot(self) -> SnapshotsApi:
         return SnapshotsApi(self.__client)
 
     @property
-    async def storage_class(self) -> StorageClassesApi:
+    def storage_class(self) -> StorageClassesApi:
         return StorageClassesApi(self.__client)
 
     @property
-    async def storage_endpoint(self) -> StorageEndpointsApi:
+    def storage_endpoint(self) -> StorageEndpointsApi:
         return StorageEndpointsApi(self.__client)
 
     @property
-    async def storage_service(self) -> StorageServicesApi:
+    def storage_service(self) -> StorageServicesApi:
         return StorageServicesApi(self.__client)
 
     @property
-    async def tenant_space(self) -> TenantSpacesApi:
+    def tenant_space(self) -> TenantSpacesApi:
         return TenantSpacesApi(self.__client)
 
     @property
-    async def tenant(self) -> TenantsApi:
+    def tenant(self) -> TenantsApi:
         return TenantsApi(self.__client)
 
     @property
-    async def volume_snapshots(self) -> VolumeSnapshotsApi:
+    def volume_snapshots(self) -> VolumeSnapshotsApi:
         return VolumeSnapshotsApi(self.__client)
 
     @property
-    async def workload_planner(self) -> WorkloadPlannerApi:
+    def workload_planner(self) -> WorkloadPlannerApi:
         return WorkloadPlannerApi(self.__client)
 
     @property
-    async def default(self) -> DefaultApi:
+    def default(self) -> DefaultApi:
         return DefaultApi(self.__client)
 
     @property
-    async def volume(self) -> VolumesApi:
+    def volume(self) -> VolumesApi:
         return VolumesApi(self.__client)
 

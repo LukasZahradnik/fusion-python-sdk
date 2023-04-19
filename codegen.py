@@ -1,5 +1,6 @@
 import inspect
 import importlib
+import importlib.util
 import re
 
 from pathlib import Path
@@ -21,10 +22,10 @@ def camel_to_snake(name):
     return camel_to_snake_pattern_0.sub(r"\1_\2", name).lower()
 
 
-output_path = Path("fjuzn/api/synchronous")
+output_path = Path("fjuzn/api/asynchronous")
 input_path = Path("./fusion/api")
 
-async_code = False
+async_code = True
 
 
 class_template = """
@@ -157,7 +158,7 @@ for file in input_path.iterdir():
                 old_return_type = return_type
                 try:
                     return_type = "".join(n.title() for n in singular_resource_name.split("_")) + "Ref"
-                    importlib.import_module(old_return_type)
+                    importlib.import_module(f"fusion.models.{singular_resource_name}_ref")
                 except:
                     return_type = old_return_type
 
@@ -171,6 +172,11 @@ for file in input_path.iterdir():
             if singular_resource_name in arg_types:
                 body_type = arg_types[singular_resource_name]
                 imports.add(f"from fusion.models.{camel_to_snake(body_type)} import {body_type}")
+
+            returned_value = f"{return_type}(**response)" if not is_list else f"[{return_type}(**r) for r in response]"
+            if new_method_name == "delete":
+                returned_value = "None"
+                return_type = "None"
 
             source_code.append(
                 method_template.format(
@@ -186,7 +192,7 @@ for file in input_path.iterdir():
                     response_get="await " if async_code else "",
                     method=method.lower(),
                     body=f", {singular_resource_name}" if singular_resource_name in arg_types else "",
-                    return_type=f"{return_type}(**response)" if not is_list else f"[{return_type}(**r) for r in response]",
+                    return_type=returned_value,
                 )
             )
 

@@ -1,11 +1,11 @@
-from typing import List
-from fusion.models.operation import Operation
-from fusion.models.role_assignment import RoleAssignment
-from fjuzn.http_client import HttpClient
 from fusion.models.role_assignment_post import RoleAssignmentPost
 from typing import Optional
+from fjuzn.http_client import HttpClient
+from fusion.models.role_assignment import RoleAssignment
 from urllib.parse import quote
 
+from fusion.models.role_assignment_ref import RoleAssignmentRef
+from typing import List
 
 
 class RoleAssignmentsApi:
@@ -14,7 +14,7 @@ class RoleAssignmentsApi:
     def __init__(self, client: HttpClient):
         self.__client = client
 
-    def create(self, role_assignment: RoleAssignmentPost, role_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    def create(self, role_assignment: RoleAssignmentPost, role_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> RoleAssignmentRef:
         """
         Creates a Role Assignment.  # noqa: E501
 
@@ -48,9 +48,9 @@ class RoleAssignmentsApi:
         url = url.replace("{role_name}", quote(str(role_name), safe=""))
         response = self.__client.post(url, query_params, header_params, role_assignment, timeout=timeout)
         
-        return Operation(**response)
+        return RoleAssignmentRef(**response)
 
-    def delete(self, role_name: str, role_assignment_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    def delete(self, role_name: str, role_assignment_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> None:
         """
         Delete a Role Assignment.  # noqa: E501
 
@@ -84,7 +84,7 @@ class RoleAssignmentsApi:
         url = url.replace("{role_assignment_name}", quote(str(role_assignment_name), safe=""))
         response = self.__client.delete(url, query_params, header_params, timeout=timeout)
         
-        return Operation(**response)
+        return None
 
     def get_by_id(self, role_assignment_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> RoleAssignment:
         """

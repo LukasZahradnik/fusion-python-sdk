@@ -1,12 +1,12 @@
-from typing import Optional
-from fusion.models.operation import Operation
-from fjuzn.http_client import AsyncHttpClient
-from fusion.models.storage_class_list import StorageClassList
 from urllib.parse import quote
 
+from fusion.models.storage_class_ref import StorageClassRef
+from fusion.models.storage_class_list import StorageClassList
+from fjuzn.http_client import AsyncHttpClient
+from typing import Optional
+from fusion.models.storage_class_patch import StorageClassPatch
 from fusion.models.storage_class_post import StorageClassPost
 from fusion.models.storage_class import StorageClass
-from fusion.models.storage_class_patch import StorageClassPatch
 
 
 class StorageClassesApi:
@@ -15,7 +15,7 @@ class StorageClassesApi:
     def __init__(self, client: AsyncHttpClient):
         self.__client = client
 
-    async def create(self, storage_class: StorageClassPost, storage_service_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    async def create(self, storage_class: StorageClassPost, storage_service_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> StorageClassRef:
         """
         (Provider) Creates a Storage Class.  # noqa: E501
 
@@ -49,9 +49,9 @@ class StorageClassesApi:
         url = url.replace("{storage_service_name}", quote(str(storage_service_name), safe=""))
         response = await self.__client.post(url, query_params, header_params, storage_class, timeout=timeout)
         
-        return Operation(**response)
+        return StorageClassRef(**response)
 
-    async def delete(self, storage_service_name: str, storage_class_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    async def delete(self, storage_service_name: str, storage_class_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> None:
         """
         Deletes a Storage Class.  # noqa: E501
 
@@ -85,7 +85,7 @@ class StorageClassesApi:
         url = url.replace("{storage_class_name}", quote(str(storage_class_name), safe=""))
         response = await self.__client.delete(url, query_params, header_params, timeout=timeout)
         
-        return Operation(**response)
+        return None
 
     async def get_by_id(self, storage_class_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> StorageClass:
         """
@@ -191,7 +191,7 @@ class StorageClassesApi:
         
         return StorageClassList(**response)
 
-    async def update(self, storage_class: StorageClassPatch, storage_service_name: str, storage_class_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    async def update(self, storage_class: StorageClassPatch, storage_service_name: str, storage_class_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> StorageClassRef:
         """
         Updates a Storage Class.  # noqa: E501
 
@@ -227,4 +227,4 @@ class StorageClassesApi:
         url = url.replace("{storage_class_name}", quote(str(storage_class_name), safe=""))
         response = await self.__client.patch(url, query_params, header_params, storage_class, timeout=timeout)
         
-        return Operation(**response)
+        return StorageClassRef(**response)

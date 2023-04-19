@@ -1,11 +1,11 @@
-from fusion.models.network_interface_group_post import NetworkInterfaceGroupPost
 from fusion.models.network_interface_group_patch import NetworkInterfaceGroupPatch
-from typing import Optional
-from fusion.models.operation import Operation
-from fjuzn.http_client import AsyncHttpClient
+from fusion.models.network_interface_group import NetworkInterfaceGroup
+from fusion.models.network_interface_group_ref import NetworkInterfaceGroupRef
 from urllib.parse import quote
 
-from fusion.models.network_interface_group import NetworkInterfaceGroup
+from fjuzn.http_client import AsyncHttpClient
+from typing import Optional
+from fusion.models.network_interface_group_post import NetworkInterfaceGroupPost
 from fusion.models.network_interface_group_list import NetworkInterfaceGroupList
 
 
@@ -15,7 +15,7 @@ class NetworkInterfaceGroupsApi:
     def __init__(self, client: AsyncHttpClient):
         self.__client = client
 
-    async def create(self, network_interface_group: NetworkInterfaceGroupPost, region_name: str, availability_zone_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    async def create(self, network_interface_group: NetworkInterfaceGroupPost, region_name: str, availability_zone_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> NetworkInterfaceGroupRef:
         """
         (Provider) Creates a Network Interface Group.  # noqa: E501
 
@@ -51,9 +51,9 @@ class NetworkInterfaceGroupsApi:
         url = url.replace("{availability_zone_name}", quote(str(availability_zone_name), safe=""))
         response = await self.__client.post(url, query_params, header_params, network_interface_group, timeout=timeout)
         
-        return Operation(**response)
+        return NetworkInterfaceGroupRef(**response)
 
-    async def delete(self, region_name: str, availability_zone_name: str, network_interface_group_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    async def delete(self, region_name: str, availability_zone_name: str, network_interface_group_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> None:
         """
         (Provider) Deletes a specific Network Interface Group.  # noqa: E501
 
@@ -89,7 +89,7 @@ class NetworkInterfaceGroupsApi:
         url = url.replace("{network_interface_group_name}", quote(str(network_interface_group_name), safe=""))
         response = await self.__client.delete(url, query_params, header_params, timeout=timeout)
         
-        return Operation(**response)
+        return None
 
     async def get_by_id(self, network_interface_group_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> NetworkInterfaceGroup:
         """
@@ -199,7 +199,7 @@ class NetworkInterfaceGroupsApi:
         
         return NetworkInterfaceGroupList(**response)
 
-    async def update(self, network_interface_group: NetworkInterfaceGroupPatch, region_name: str, availability_zone_name: str, network_interface_group_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    async def update(self, network_interface_group: NetworkInterfaceGroupPatch, region_name: str, availability_zone_name: str, network_interface_group_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> NetworkInterfaceGroupRef:
         """
         (Provider) Updates a Network Interface Group.  # noqa: E501
 
@@ -237,4 +237,4 @@ class NetworkInterfaceGroupsApi:
         url = url.replace("{network_interface_group_name}", quote(str(network_interface_group_name), safe=""))
         response = await self.__client.patch(url, query_params, header_params, network_interface_group, timeout=timeout)
         
-        return Operation(**response)
+        return NetworkInterfaceGroupRef(**response)

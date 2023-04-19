@@ -1,11 +1,11 @@
-from fusion.models.operation import Operation
-from fusion.models.protection_policy_list import ProtectionPolicyList
-from fusion.models.protection_policy import ProtectionPolicy
-from fjuzn.http_client import HttpClient
+from fusion.models.protection_policy_post import ProtectionPolicyPost
 from typing import Optional
+from fjuzn.http_client import HttpClient
+from fusion.models.protection_policy import ProtectionPolicy
+from fusion.models.protection_policy_list import ProtectionPolicyList
 from urllib.parse import quote
 
-from fusion.models.protection_policy_post import ProtectionPolicyPost
+from fusion.models.protection_policy_ref import ProtectionPolicyRef
 
 
 class ProtectionPoliciesApi:
@@ -14,7 +14,7 @@ class ProtectionPoliciesApi:
     def __init__(self, client: HttpClient):
         self.__client = client
 
-    def create(self, protection_policy: ProtectionPolicyPost, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    def create(self, protection_policy: ProtectionPolicyPost, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> ProtectionPolicyRef:
         """
         Creates a Protection Policy.  # noqa: E501
 
@@ -47,9 +47,9 @@ class ProtectionPoliciesApi:
         
         response = self.__client.post(url, query_params, header_params, protection_policy, timeout=timeout)
         
-        return Operation(**response)
+        return ProtectionPolicyRef(**response)
 
-    def delete(self, protection_policy_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    def delete(self, protection_policy_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> None:
         """
         Deletes a specific protection policy.  # noqa: E501
 
@@ -81,7 +81,7 @@ class ProtectionPoliciesApi:
         url = url.replace("{protection_policy_name}", quote(str(protection_policy_name), safe=""))
         response = self.__client.delete(url, query_params, header_params, timeout=timeout)
         
-        return Operation(**response)
+        return None
 
     def get_by_id(self, protection_policy_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> ProtectionPolicy:
         """

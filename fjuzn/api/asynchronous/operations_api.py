@@ -1,9 +1,9 @@
-from typing import Optional
-from fusion.models.operation import Operation
-from fjuzn.http_client import AsyncHttpClient
 from urllib.parse import quote
 
+from fjuzn.http_client import AsyncHttpClient
+from typing import Optional
 from fusion.models.operation_list import OperationList
+from fusion.models.operation import Operation
 
 
 class OperationsApi:

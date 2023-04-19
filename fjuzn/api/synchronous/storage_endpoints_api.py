@@ -1,11 +1,11 @@
-from fusion.models.operation import Operation
 from fusion.models.storage_endpoint import StorageEndpoint
-from fjuzn.http_client import HttpClient
+from fusion.models.operation import Operation
 from typing import Optional
-from urllib.parse import quote
-
+from fjuzn.http_client import HttpClient
 from fusion.models.storage_endpoint_patch import StorageEndpointPatch
 from fusion.models.storage_endpoint_list import StorageEndpointList
+from urllib.parse import quote
+
 from fusion.models.storage_endpoint_post import StorageEndpointPost
 
 
@@ -53,7 +53,7 @@ class StorageEndpointsApi:
         
         return Operation(**response)
 
-    def delete(self, region_name: str, availability_zone_name: str, storage_endpoint_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    def delete(self, region_name: str, availability_zone_name: str, storage_endpoint_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> None:
         """
         (Provider) Deletes a specific Storage Endpoint.  # noqa: E501
 
@@ -89,7 +89,7 @@ class StorageEndpointsApi:
         url = url.replace("{storage_endpoint_name}", quote(str(storage_endpoint_name), safe=""))
         response = self.__client.delete(url, query_params, header_params, timeout=timeout)
         
-        return Operation(**response)
+        return None
 
     def get_by_id(self, storage_endpoint_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> StorageEndpoint:
         """

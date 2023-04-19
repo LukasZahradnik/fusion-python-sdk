@@ -1,9 +1,9 @@
-from fusion.models.hardware_type import HardwareType
-from fjuzn.http_client import HttpClient
-from fusion.models.hardware_type_list import HardwareTypeList
 from typing import Optional
+from fusion.models.hardware_type_list import HardwareTypeList
+from fjuzn.http_client import HttpClient
 from urllib.parse import quote
 
+from fusion.models.hardware_type import HardwareType
 
 
 class HardwareTypesApi:

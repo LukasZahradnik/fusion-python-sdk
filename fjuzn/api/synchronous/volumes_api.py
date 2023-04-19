@@ -1,14 +1,14 @@
+from fusion.models.space import Space
+from typing import Optional
+from fjuzn.http_client import HttpClient
+from fusion.models.volume import Volume
 from fusion.models.volume_list import VolumeList
 from fusion.models.volume_patch import VolumePatch
-from fusion.models.performance import Performance
-from fusion.models.volume import Volume
-from fusion.models.operation import Operation
-from fjuzn.http_client import HttpClient
-from typing import Optional
+from fusion.models.volume_post import VolumePost
 from urllib.parse import quote
 
-from fusion.models.space import Space
-from fusion.models.volume_post import VolumePost
+from fusion.models.performance import Performance
+from fusion.models.volume_ref import VolumeRef
 
 
 class VolumesApi:
@@ -17,7 +17,7 @@ class VolumesApi:
     def __init__(self, client: HttpClient):
         self.__client = client
 
-    def create(self, volume: VolumePost, tenant_name: str, tenant_space_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    def create(self, volume: VolumePost, tenant_name: str, tenant_space_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> VolumeRef:
         """
         Creates a Volume.  # noqa: E501
 
@@ -53,9 +53,9 @@ class VolumesApi:
         url = url.replace("{tenant_space_name}", quote(str(tenant_space_name), safe=""))
         response = self.__client.post(url, query_params, header_params, volume, timeout=timeout)
         
-        return Operation(**response)
+        return VolumeRef(**response)
 
-    def delete(self, tenant_name: str, tenant_space_name: str, volume_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    def delete(self, tenant_name: str, tenant_space_name: str, volume_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> None:
         """
         Eradicate a specific volume. Volume has to be destroyed before it can be eradicated.  # noqa: E501
 
@@ -91,7 +91,7 @@ class VolumesApi:
         url = url.replace("{volume_name}", quote(str(volume_name), safe=""))
         response = self.__client.delete(url, query_params, header_params, timeout=timeout)
         
-        return Operation(**response)
+        return None
 
     def get_by_id(self, volume_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Volume:
         """
@@ -427,7 +427,7 @@ class VolumesApi:
         
         return VolumeList(**response)
 
-    def update(self, volume: VolumePatch, tenant_name: str, tenant_space_name: str, volume_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    def update(self, volume: VolumePatch, tenant_name: str, tenant_space_name: str, volume_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> VolumeRef:
         """
         Updates a Volume -- renaming, and resizing it; changing its Storage Class; changing its Placement Group; adding or removing host connections.  # noqa: E501
 
@@ -465,4 +465,4 @@ class VolumesApi:
         url = url.replace("{volume_name}", quote(str(volume_name), safe=""))
         response = self.__client.patch(url, query_params, header_params, volume, timeout=timeout)
         
-        return Operation(**response)
+        return VolumeRef(**response)

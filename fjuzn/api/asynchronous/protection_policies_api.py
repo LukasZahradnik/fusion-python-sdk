@@ -1,10 +1,10 @@
-from fusion.models.protection_policy_post import ProtectionPolicyPost
 from fusion.models.protection_policy_list import ProtectionPolicyList
-from typing import Optional
-from fusion.models.operation import Operation
-from fjuzn.http_client import AsyncHttpClient
 from urllib.parse import quote
 
+from fjuzn.http_client import AsyncHttpClient
+from typing import Optional
+from fusion.models.protection_policy_ref import ProtectionPolicyRef
+from fusion.models.protection_policy_post import ProtectionPolicyPost
 from fusion.models.protection_policy import ProtectionPolicy
 
 
@@ -14,7 +14,7 @@ class ProtectionPoliciesApi:
     def __init__(self, client: AsyncHttpClient):
         self.__client = client
 
-    async def create(self, protection_policy: ProtectionPolicyPost, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    async def create(self, protection_policy: ProtectionPolicyPost, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> ProtectionPolicyRef:
         """
         Creates a Protection Policy.  # noqa: E501
 
@@ -47,9 +47,9 @@ class ProtectionPoliciesApi:
         
         response = await self.__client.post(url, query_params, header_params, protection_policy, timeout=timeout)
         
-        return Operation(**response)
+        return ProtectionPolicyRef(**response)
 
-    async def delete(self, protection_policy_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> Operation:
+    async def delete(self, protection_policy_name: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> None:
         """
         Deletes a specific protection policy.  # noqa: E501
 
@@ -81,7 +81,7 @@ class ProtectionPoliciesApi:
         url = url.replace("{protection_policy_name}", quote(str(protection_policy_name), safe=""))
         response = await self.__client.delete(url, query_params, header_params, timeout=timeout)
         
-        return Operation(**response)
+        return None
 
     async def get_by_id(self, protection_policy_id: str, *, x_request_id: Optional[str] = None, authorization: Optional[str] = None, x_correlation_id: Optional[str] = None, timeout: Optional[float] = None) -> ProtectionPolicy:
         """

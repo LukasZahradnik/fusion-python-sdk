@@ -1,10 +1,10 @@
+from fusion.models.placement_recommendation_post import PlacementRecommendationPost
 from fusion.models.operation import Operation
-from fusion.models.placement_recommendation import PlacementRecommendation
-from fjuzn.http_client import HttpClient
 from typing import Optional
+from fjuzn.http_client import HttpClient
+from fusion.models.placement_recommendation import PlacementRecommendation
 from urllib.parse import quote
 
-from fusion.models.placement_recommendation_post import PlacementRecommendationPost
 
 
 class WorkloadPlannerApi:
